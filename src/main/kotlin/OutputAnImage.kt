@@ -28,7 +28,7 @@ class OutputAnImage(imageWidth: Int, outputLocation: File) {
                     for (x in 0 until imageWidth) {
                         val u = x.toDouble() / (imageWidth - 1)
                         val v = y.toDouble() / (imageHeight - 1)
-                        val r = Ray(origin, lowerLeftCorner + (horizontal * u)  + (vertical * v)  - origin)
+                        val r = Ray(origin, lowerLeftCorner + (u * horizontal)  + (v * vertical)  - origin)
                         writeColour(rayColour(r))
                     }
                 }
@@ -39,5 +39,5 @@ class OutputAnImage(imageWidth: Int, outputLocation: File) {
 }
 
 fun main() {
-    OutputAnImage(400, File("./400.ppm"))
+    OutputAnImage(400, File("./results/400.ppm"))
 }

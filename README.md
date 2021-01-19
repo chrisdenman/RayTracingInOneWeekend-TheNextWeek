@@ -19,3 +19,8 @@
 ### notes
 
 -   it's not a good idea to be eagerly evaluated properties into classes that may be computationally expensive
+
+
+## 3. [Rays, a Simple Camera, and Background](https://raytracing.github.io/books/RayTracingInOneWeekend.html#rays,asimplecamera,andbackground)
+
+### notes

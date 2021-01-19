@@ -35,8 +35,11 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
     companion object {
         val ZERO = Vec3(0,0,0)
+        val UNIT = Vec3(1,1,1)
     }
 }
+
+operator fun Double.times(v: Vec3) = v * this
 
 typealias Point3 = Vec3
 typealias Colour = Vec3
@@ -50,5 +53,5 @@ fun Writer.writeColour(pixelColour: Colour) {
 fun rayColour(ray: Ray): Colour {
     val unitRay = ray.direction.unit()
     val t: Double = (unitRay.y + 1.0) * 0.5
-    return Colour(1, 1, 1) * (1.0 - t) + Colour(0.5, 0.7, 1.0) * t
+    return Vec3.UNIT * (1.0 - t) + Colour(0.5, 0.7, 1.0) * t
 }
