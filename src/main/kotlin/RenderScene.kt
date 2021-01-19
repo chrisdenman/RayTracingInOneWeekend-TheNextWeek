@@ -39,5 +39,5 @@ class RenderScene(imageWidth: Int, outputLocation: File) {
 }
 
 fun main() {
-    RenderScene(400, File("./results/400_sphere.ppm"))
+    RenderScene(400, File("./results/400_sphere_normals_better_intersection.ppm"))
 }

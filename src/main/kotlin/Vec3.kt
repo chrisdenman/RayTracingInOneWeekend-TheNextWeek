@@ -17,7 +17,7 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
     operator fun times(t: Double): Vec3 = Vec3(x * t, y * t, z * t)
 
-    private fun magnitudeSquared(): Double = x * x + y * y + z * z
+    fun magnitudeSquared(): Double = x * x + y * y + z * z
 
     fun magnitude(): Double = sqrt(magnitudeSquared())
 
