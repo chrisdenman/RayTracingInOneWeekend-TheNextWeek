@@ -1,6 +1,6 @@
 import java.io.File
 
-class OutputAnImage(imageWidth: Int, outputLocation: File) {
+class RenderScene(imageWidth: Int, outputLocation: File) {
     init {
         // Image
         val aspectRatio: Double = 16.0 / 9.0
@@ -29,7 +29,7 @@ class OutputAnImage(imageWidth: Int, outputLocation: File) {
                         val u = x.toDouble() / (imageWidth - 1)
                         val v = y.toDouble() / (imageHeight - 1)
                         val r = Ray(origin, lowerLeftCorner + (u * horizontal)  + (v * vertical)  - origin)
-                        writeColour(rayColour(r))
+                        writeColour(r.colour())
                     }
                 }
                 println("Done.")
@@ -39,5 +39,5 @@ class OutputAnImage(imageWidth: Int, outputLocation: File) {
 }
 
 fun main() {
-    OutputAnImage(400, File("./results/400.ppm"))
+    RenderScene(400, File("./results/400_sphere.ppm"))
 }
