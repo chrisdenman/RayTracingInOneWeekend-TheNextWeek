@@ -13,6 +13,8 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
         z + other.z
     )
 
+    operator fun minus(other: Vec3): Vec3 = this + -other
+
     operator fun times(t: Double): Vec3 = Vec3(x * t, y * t, z * t)
 
     fun magnitudeSquared(): Double = x * x + y * y + z * z
@@ -30,6 +32,10 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
     )
 
     fun unit(): Vec3 = this / magnitude()
+
+    companion object {
+        val ZERO = Vec3(0,0,0)
+    }
 }
 
 typealias Point3 = Vec3
@@ -39,4 +45,10 @@ fun Writer.writeColour(pixelColour: Colour) {
     (pixelColour * 255.999).let {
         write("${it.x.toInt()} ${it.y.toInt()} ${it.z.toInt()}\n")
     }
+}
+
+fun rayColour(ray: Ray): Colour {
+    val unitRay = ray.direction.unit()
+    val t: Double = (unitRay.y + 1.0) * 0.5
+    return Colour(1, 1, 1) * (1.0 - t) + Colour(0.5, 0.7, 1.0) * t
 }
