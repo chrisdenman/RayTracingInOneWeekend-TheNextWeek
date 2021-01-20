@@ -21,7 +21,7 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
     fun magnitude(): Double = sqrt(magnitudeSquared())
 
-    operator fun div(t: Double): Vec3 = this * (1.0 / t)
+    operator fun div(t: Double): Vec3 = this * t.reciprocal()
 
     infix fun dot(v: Vec3) = x * v.x + y * v.y + z * v.z
 
@@ -44,8 +44,11 @@ operator fun Double.times(v: Vec3) = v * this
 typealias Point3 = Vec3
 typealias Colour = Vec3
 
-fun Writer.writeColour(pixelColour: Colour) {
-    (pixelColour * 255.999).let {
-        write("${it.x.toInt()} ${it.y.toInt()} ${it.z.toInt()}\n")
+fun Double.reciprocal() = 1.0 / this
+
+fun Writer.writeColour(pixelColour: Colour, samplesPerPixel: Int) {
+    val scale = 1.0 / samplesPerPixel
+    (scale * pixelColour).let {
+        write("${(256 * it.x.clamp(0.0, 0.999)).toInt()} ${(256 * it.y.clamp(0.0, 0.999)).toInt()} ${(256 * it.z.clamp(0.0, 0.999)).toInt()}\n")
     }
 }
