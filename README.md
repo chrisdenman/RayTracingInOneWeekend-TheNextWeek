@@ -19,5 +19,3 @@
 ## 5. [Adding a Sphere](https://raytracing.github.io/books/RayTracingInOneWeekend.html#addingasphere)
 
 ## 6. [Surface Normals and Multiple Objects](https://raytracing.github.io/books/RayTracingInOneWeekend.html#surfacenormalsandmultipleobjects)
-
-### notes
