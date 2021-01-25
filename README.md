@@ -16,3 +16,5 @@ A Kotlin version of the Peter Shirley's ray tracing course.
 ## 6. [Surface Normals and Multiple Objects](https://raytracing.github.io/books/RayTracingInOneWeekend.html#surfacenormalsandmultipleobjects)
 
 ## 7. [Antialiasing](https://raytracing.github.io/books/RayTracingInOneWeekend.html#antialiasing)
+
+## 7. [Diffuse Materials](https://raytracing.github.io/books/RayTracingInOneWeekend.html#diffusematerials)

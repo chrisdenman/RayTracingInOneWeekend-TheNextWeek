@@ -4,6 +4,7 @@ import java.io.File
 class Renderer(private val outputLocation: File) {
 
     companion object {
+        private const val maxDepth = 50
         private const val samplesPerPixel = 100
         private const val imageWidth = 400
         private const val imageHeight = (imageWidth / Camera.aspectRatio).toInt()
@@ -31,7 +32,7 @@ class Renderer(private val outputLocation: File) {
                             val u = (x + Math.random()) / (imageWidth - 1)
                             val v = (y + Math.random()) / (imageHeight - 1)
                             val r = camera.getRay(u, v)
-                            pixelColour += r.colour(world)
+                            pixelColour += r.colour(world, maxDepth)
                         }
                         writeColour(pixelColour, samplesPerPixel)
                     }
@@ -43,5 +44,5 @@ class Renderer(private val outputLocation: File) {
 }
 
 fun main() {
-    Renderer(File("./results/400_sphere_normals_ground_antialiased.ppm")).render()
+    Renderer(File("./results/diffuse_sphere_gamma_corrected_acne_hemispherical.ppm")).render()
 }
