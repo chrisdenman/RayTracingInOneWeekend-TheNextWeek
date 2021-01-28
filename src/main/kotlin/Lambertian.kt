@@ -1,6 +1,6 @@
 import Vec3.Companion.randomUnitVector
 
-class Lambertian(val albedo: Colour) : Material {
+class Lambertian(private val albedo: Colour) : Material {
     override fun scatter(ray: Ray, hit: Hit): ScatterData {
         var scatterDirection = hit.normal + randomUnitVector
         if (scatterDirection.isNearZero) {

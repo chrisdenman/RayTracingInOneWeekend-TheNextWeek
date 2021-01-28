@@ -3,6 +3,7 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 import kotlin.random.Random
 
+@Suppress("unused")
 data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
     constructor(x: Int, y: Int, z: Int) : this(x.toDouble(), y.toDouble(), z.toDouble())
@@ -51,7 +52,7 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
         val UNIT = Vec3(1, 1, 1)
         val randomUnitComponents: Vec3
             get() = Vec3(Random.nextDouble(), Random.nextDouble(), Random.nextDouble())
-        fun random(min: Double, max: Double): Vec3 =
+        private fun random(min: Double, max: Double): Vec3 =
             Vec3(Random.nextDouble(min, max), Random.nextDouble(min, max), Random.nextDouble(min, max))
         val randomUnitVector: Vec3
             get() = randomInUnitSphere.unit()
