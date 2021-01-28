@@ -12,8 +12,8 @@ class Renderer(private val outputLocation: File) {
 
     private val groundMaterial = Lambertian(Colour(0.8, 0.8, 0.0))
     private val centerMaterial = Lambertian(Colour(0.7, 0.3, 0.3))
-    private val leftMaterial = Metal(Colour(0.8, 0.8, 0.8))
-    private val rightMaterial = Metal(Colour(0.8, 0.6, 0.2))
+    private val leftMaterial = Metal(Colour(0.8, 0.8, 0.8), 0.3)
+    private val rightMaterial = Metal(Colour(0.8, 0.6, 0.2), 0.1)
 
     private val world = World(listOf(
         Sphere(Point3(0.0, -100.5, -1.0), 100.0, groundMaterial),
@@ -51,5 +51,5 @@ class Renderer(private val outputLocation: File) {
 }
 
 fun main() {
-    Renderer(File("./results/metal_spheres.ppm")).render()
+    Renderer(File("./results/metal_spheres_fuzziness.ppm")).render()
 }
