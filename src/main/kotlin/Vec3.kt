@@ -58,7 +58,7 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
     companion object {
         fun refract(uv: Vec3, n: Vec3, etai_over_etat: Double): Vec3 {
             val cosTheta = min((-1.0 * uv) dot n, 1.0)
-            val perpendicular = etai_over_etat * (uv + (cosTheta * n))
+            val perpendicular = etai_over_etat * (uv + cosTheta * n)
             val parallel = n * -sqrt(1.0 - perpendicular.magnitudeSquared())
             return perpendicular + parallel
         }
