@@ -9,8 +9,8 @@ data class Ray(val origin: Point3, val direction: Vec3) {
                 world.hit(this, 0.001, Double.POSITIVE_INFINITY).let { worldHit ->
                     if (worldHit != null) {
                         val scatterData = worldHit.hittable.material.scatter(this, worldHit.hit)
-                        if (scatterData.scattered) {
-                            scatterData.attenuation * scatterData.ray.colour(world, depth - 1)
+                        if (scatterData.isScattered) {
+                            scatterData.ray.colour(world, depth - 1).scale(scatterData.attenuation)
                         } else Colour.ZERO
                     } else {
                         val unitDirection = direction.unit()

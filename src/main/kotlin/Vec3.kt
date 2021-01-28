@@ -27,7 +27,11 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
         (abs(x) < tolerance) && (abs(y) < tolerance) && (abs(z) < tolerance)
     }
 
-
+    fun scale(scalar: Vec3) = Vec3(
+        scalar.x * this.x,
+        scalar.y * this.y,
+        scalar.z * this.z
+    )
 
     operator fun div(t: Double): Vec3 = this * t.reciprocal()
 
