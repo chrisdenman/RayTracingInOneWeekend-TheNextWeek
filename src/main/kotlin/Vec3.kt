@@ -1,4 +1,5 @@
 import java.io.Writer
+import kotlin.math.abs
 import kotlin.math.sqrt
 import kotlin.random.Random
 
@@ -22,6 +23,12 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
     private fun magnitude(): Double = sqrt(magnitudeSquared())
 
+    val isNearZero: Boolean = (1E-8).let { tolerance ->
+        (abs(x) < tolerance) && (abs(y) < tolerance) && (abs(z) < tolerance)
+    }
+
+
+
     operator fun div(t: Double): Vec3 = this * t.reciprocal()
 
     infix fun dot(v: Vec3) = x * v.x + y * v.y + z * v.z
@@ -35,6 +42,7 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
     fun unit(): Vec3 = this / magnitude()
 
     companion object {
+        fun reflect(v: Vec3, normal: Vec3): Vec3 = v - 2 * (v dot normal) * normal
         val ZERO = Vec3(0, 0, 0)
         val UNIT = Vec3(1, 1, 1)
         val randomUnitComponents: Vec3

@@ -17,4 +17,6 @@ A Kotlin version of the Peter Shirley's ray tracing course.
 
 ## 7. [Antialiasing](https://raytracing.github.io/books/RayTracingInOneWeekend.html#antialiasing)
 
-## 7. [Diffuse Materials](https://raytracing.github.io/books/RayTracingInOneWeekend.html#diffusematerials)
+## 8. [Diffuse Materials](https://raytracing.github.io/books/RayTracingInOneWeekend.html#diffusematerials)
+
+## 9 [Metal](https://raytracing.github.io/books/RayTracingInOneWeekend.html#metal)

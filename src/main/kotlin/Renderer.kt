@@ -10,9 +10,16 @@ class Renderer(private val outputLocation: File) {
         private const val imageHeight = (imageWidth / Camera.aspectRatio).toInt()
     }
 
+    private val groundMaterial = Lambertian(Colour(0.8, 0.8, 0.0))
+    private val centerMaterial = Lambertian(Colour(0.7, 0.3, 0.3))
+    private val leftMaterial = Metal(Colour(0.8, 0.8, 0.8))
+    private val rightMaterial = Metal(Colour(0.8, 0.6, 0.2))
+
     private val world = World(listOf(
-        Sphere(Point3(0, 0, -1), 0.5),
-        Sphere(Point3(0.0, -100.5, -1.0), 100.0)
+        Sphere(Point3(0.0, -100.5, -1.0), 100.0, groundMaterial),
+        Sphere(Point3(0.0, 0.0, -1.0), 0.5, centerMaterial),
+        Sphere(Point3(-1.0, 0.0, -1.0), 0.5, leftMaterial),
+        Sphere(Point3(1.0, 0.0, -1.0), 0.5, rightMaterial),
     ))
 
     private val camera = Camera()
@@ -44,5 +51,5 @@ class Renderer(private val outputLocation: File) {
 }
 
 fun main() {
-    Renderer(File("./results/diffuse_sphere_gamma_corrected_acne_hemispherical.ppm")).render()
+    Renderer(File("./results/metal_spheres.ppm")).render()
 }
