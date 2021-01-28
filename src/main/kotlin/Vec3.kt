@@ -1,5 +1,6 @@
 import java.io.Writer
 import kotlin.math.abs
+import kotlin.math.min
 import kotlin.math.sqrt
 import kotlin.random.Random
 
@@ -46,10 +47,25 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
     fun unit(): Vec3 = this / magnitude()
 
+    /*
+    inline vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat) {
+        auto cos_theta = fmin(dot(-uv, n), 1.0);
+        vec3 r_out_perp =  etai_over_etat * (uv + cos_theta*n);
+        vec3 r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.length_squared())) * n;
+        return r_out_perp + r_out_parallel;
+    }
+    */
     companion object {
+        fun refract(uv: Vec3, n: Vec3, etai_over_etat: Double): Vec3 {
+            val cosTheta = min((-1.0 * uv) dot n, 1.0)
+            val perpendicular = etai_over_etat * (uv + (cosTheta * n))
+            val parallel = n * -sqrt(1.0 - perpendicular.magnitudeSquared())
+            return perpendicular + parallel
+        }
+
         fun reflect(v: Vec3, normal: Vec3): Vec3 = v - 2 * (v dot normal) * normal
         val ZERO = Vec3(0, 0, 0)
-        val UNIT = Vec3(1, 1, 1)
+        val ONE = Vec3(1, 1, 1)
         val randomUnitComponents: Vec3
             get() = Vec3(Random.nextDouble(), Random.nextDouble(), Random.nextDouble())
         private fun random(min: Double, max: Double): Vec3 =

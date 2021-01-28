@@ -4,7 +4,7 @@ interface Hittable {
 }
 
 data class Hit(val p: Point3, val t: Double, val ray: Ray, val outwardNormal: Vec3) {
-    private val frontFace: Boolean = (ray.direction dot outwardNormal) < 0
+    val frontFace: Boolean = (ray.direction dot outwardNormal) < 0
     val normal: Vec3 = if (frontFace) outwardNormal else -outwardNormal
 }
 

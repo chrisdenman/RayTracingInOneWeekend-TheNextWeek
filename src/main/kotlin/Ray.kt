@@ -7,16 +7,15 @@ data class Ray(val origin: Point3, val direction: Vec3) {
             depth <= 0 -> Colour.ZERO
             else -> {
                 world.hit(this, 0.001, Double.POSITIVE_INFINITY).let { worldHit ->
-                    if (worldHit != null) {
-                        val scatterData = worldHit.hittable.material.scatter(this, worldHit.hit)
-                        if (scatterData.isScattered) {
-                            scatterData.ray.colour(world, depth - 1).scale(scatterData.attenuation)
-                        } else Colour.ZERO
-                    } else {
-                        val unitDirection = direction.unit()
-                        val t = 0.5 * (unitDirection.y + 1.0)
-                        ((1.0 - t) * Colour.UNIT) + (t * Colour(0.5, 0.7, 1.0))
+                    worldHit?.hittable?.material?.scatter(this, worldHit.hit)?.let { scatterData ->
+                        when (scatterData.isScattered) {
+                            true -> scatterData.ray.colour(world, depth - 1).scale(scatterData.attenuation)
+                            else -> Colour.ZERO
+                        }
                     }
+                        ?: (0.5 * (direction.unit().y + 1.0)).let { t ->
+                            ((1.0 - t) * Colour.ONE) + (t * Colour(0.5, 0.7, 1.0))
+                        }
                 }
             }
         }
