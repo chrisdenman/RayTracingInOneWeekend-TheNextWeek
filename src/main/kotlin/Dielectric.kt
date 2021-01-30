@@ -9,6 +9,3 @@ class Dielectric(private val indexOfRefraction: Double) : Material {
         return ScatterData(attenuation, scattered, true)
     }
 }
-
-// if i swap 2 first params in refracted, we get non inverted glass
-// if i change hit.normal to -hit.normal, we get non inverted glass
