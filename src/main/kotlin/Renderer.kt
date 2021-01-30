@@ -6,7 +6,7 @@ class Renderer(private val outputLocation: File) {
     companion object {
         private const val maxDepth = 50
         private const val samplesPerPixel = 100
-        private const val imageWidth = 400
+        private const val imageWidth = 2000
         private const val imageHeight = (imageWidth / Camera.aspectRatio).toInt()
     }
 
@@ -19,6 +19,7 @@ class Renderer(private val outputLocation: File) {
         Sphere(Point3(0.0, -100.5, -1.0), 100.0, groundMaterial),
         Sphere(Point3(0.0, 0.0, -1.0), 0.5, centerMaterial),
         Sphere(Point3(-1.0, 0.0, -1.0), 0.5, leftMaterial),
+        Sphere(Point3(-1.0, 0.0, -1.0), -0.4, leftMaterial),
         Sphere(Point3(1.0, 0.0, -1.0), 0.5, rightMaterial),
     ))
 
@@ -51,5 +52,5 @@ class Renderer(private val outputLocation: File) {
 }
 
 fun main() {
-    Renderer(File("./results/dielectric_refraction_reflection.ppm")).render()
+    Renderer(File("./results/dielectric_refraction_reflection_schlick_bubble.ppm")).render()
 }
