@@ -104,6 +104,7 @@ typealias Point3 = Vec3
 typealias Colour = Vec3
 
 fun Double.reciprocal() = 1.0 / this
+val Double.cosOrSin get() = sqrt(1 - this * this)
 
 fun Writer.writeColour(pixelColour: Colour, samplesPerPixel: Int) {
     val scale = 1.0 / samplesPerPixel
