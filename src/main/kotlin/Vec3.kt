@@ -21,23 +21,21 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
     operator fun times(t: Double): Vec3 = Vec3(x * t, y * t, z * t)
 
-    fun magnitudeSquared(): Double = x * x + y * y + z * z
+    val magnitudeSquared: Double = (x * x) + (y * y) + (z * z)
 
-    private fun magnitude(): Double = sqrt(magnitudeSquared())
+    val magnitude: Double = sqrt(magnitudeSquared)
 
-    val isNearZero: Boolean = (1E-8).let { tolerance ->
-        (abs(x) < tolerance) && (abs(y) < tolerance) && (abs(z) < tolerance)
-    }
+    val isNearZero: Boolean = tolerable(x) && tolerable(y) && tolerable(z)
 
     fun scale(scalar: Vec3) = Vec3(
-        scalar.x * this.x,
-        scalar.y * this.y,
-        scalar.z * this.z
+        scalar.x * x,
+        scalar.y * y,
+        scalar.z * z
     )
 
     operator fun div(t: Double): Vec3 = this * t.reciprocal()
 
-    infix fun dot(v: Vec3) = x * v.x + y * v.y + z * v.z
+    infix fun dot(v: Vec3) = (x * v.x) + (y * v.y) + (z * v.z)
 
     operator fun times(v: Vec3) = Vec3(
         y * v.z - z * v.y,
@@ -45,7 +43,8 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
         x * v.y - y * v.x
     )
 
-    fun unit(): Vec3 = this / magnitude()
+    val unit: Vec3
+        get() = this / magnitude
 
     /*
     inline vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat) {
@@ -56,38 +55,48 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
     }
     */
     companion object {
-        fun refract(uv: Vec3, n: Vec3, etai_over_etat: Double): Vec3 {
-            val cosTheta = min((-1.0 * uv) dot n, 1.0)
-            val perpendicular = etai_over_etat * (uv + cosTheta * n)
-            val parallel = n * -sqrt(1.0 - perpendicular.magnitudeSquared())
-            return perpendicular + parallel
-        }
 
-        fun reflect(v: Vec3, normal: Vec3): Vec3 = v - 2 * (v dot normal) * normal
-        val ZERO = Vec3(0, 0, 0)
+        private const val TOLERANCE = 1E-8
         val ONE = Vec3(1, 1, 1)
-        val randomUnitComponents: Vec3
-            get() = Vec3(Random.nextDouble(), Random.nextDouble(), Random.nextDouble())
-        private fun random(min: Double, max: Double): Vec3 =
-            Vec3(Random.nextDouble(min, max), Random.nextDouble(min, max), Random.nextDouble(min, max))
-        val randomUnitVector: Vec3
-            get() = randomInUnitSphere.unit()
-        val randomInUnitSphere: Vec3
-            get() {
-                var candidate = random(-1.0, 1.0)
-                while (candidate.magnitudeSquared() >= 1) {
-                    candidate = random(-1.0, 1.0)
-                }
-                return candidate
-            }
+        val ZERO = Vec3(0, 0, 0)
 
-        fun randomInHemiSphere(normal: Vec3): Vec3 =
+        private fun boundedRandomComponents(minInclusive: Double, maxExclusive: Double): Vec3 =
+            Vec3(Random.nextDouble(minInclusive, maxExclusive), Random.nextDouble(minInclusive, maxExclusive), Random.nextDouble(minInclusive, maxExclusive))
+
+        fun randomInHemisphere(normal: Vec3): Vec3 =
             randomInUnitSphere.let {
                 when {
                     it dot normal > 0.0 -> it
                     else -> -it
                 }
             }
+
+        val randomInUnitSphere: Vec3
+            get() {
+                var candidate = boundedRandomComponents(-1.0, 1.0)
+                while (candidate.magnitudeSquared >= 1) {
+                    candidate = boundedRandomComponents(-1.0, 1.0)
+                }
+                return candidate
+            }
+
+        // suspicious
+        val randomUnit: Vec3
+            get() = randomInUnitSphere.unit
+
+        val randomUnitComponents: Vec3
+            get() = Vec3(Random.nextDouble(), Random.nextDouble(), Random.nextDouble())
+
+        fun reflect(v: Vec3, normal: Vec3): Vec3 = v - 2 * (v dot normal) * normal
+
+        fun refract(uv: Vec3, n: Vec3, etai_over_etat: Double): Vec3 {
+            val cosTheta = min(-uv dot n, 1.0)
+            val perpendicular = etai_over_etat * (uv + cosTheta * n)
+            val parallel = n * -sqrt(1.0 - perpendicular.magnitudeSquared)
+            return perpendicular + parallel
+        }
+
+        private fun tolerable(e: Double): Boolean = abs(e) < TOLERANCE
     }
 }
 

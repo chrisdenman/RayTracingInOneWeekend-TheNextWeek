@@ -13,7 +13,7 @@ data class Ray(val origin: Point3, val direction: Vec3) {
                             else -> Colour.ZERO
                         }
                     }
-                        ?: (0.5 * (direction.unit().y + 1.0)).let { t ->
+                        ?: (0.5 * (direction.unit.y + 1.0)).let { t ->
                             ((1.0 - t) * Colour.ONE) + (t * Colour(0.5, 0.7, 1.0))
                         }
                 }

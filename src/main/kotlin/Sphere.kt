@@ -4,9 +4,9 @@ class Sphere(private val center: Point3, private val radius: Double, override va
 
     override fun hit(ray: Ray, tMin: Double, tMax: Double): Hit? {
         val oc = ray.origin - center
-        val a = ray.direction.magnitudeSquared()
+        val a = ray.direction.magnitudeSquared
         val halfB = oc dot ray.direction
-        val c = oc.magnitudeSquared() - (radius * radius)
+        val c = oc.magnitudeSquared - (radius * radius)
         val discriminant = (halfB * halfB) - (a * c)
 
         if (discriminant < 0 ) return null
