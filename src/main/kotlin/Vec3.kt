@@ -80,7 +80,6 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
                 return candidate
             }
 
-        // suspicious
         val randomUnit: Vec3
             get() = randomInUnitSphere.unit
 
@@ -89,11 +88,10 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
         fun reflect(v: Vec3, normal: Vec3): Vec3 = v - 2 * (v dot normal) * normal
 
-        fun refract(uv: Vec3, n: Vec3, etai_over_etat: Double): Vec3 {
-            val cosTheta = min(-uv dot n, 1.0)
-            val perpendicular = etai_over_etat * (uv + cosTheta * n)
-            val parallel = n * -sqrt(1.0 - perpendicular.magnitudeSquared)
-            return perpendicular + parallel
+        fun refract(i: Vec3, n: Vec3, etai_over_etat: Double): Vec3 {
+            val cosThetai = min(-i dot n, 1.0)
+            val sinSquaredThetat = etai_over_etat * etai_over_etat * (1 - (cosThetai * cosThetai))
+            return (etai_over_etat * i) + (etai_over_etat * cosThetai - sqrt(1 - sinSquaredThetat)) * n
         }
 
         private fun tolerable(e: Double): Boolean = abs(e) < TOLERANCE

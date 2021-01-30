@@ -12,16 +12,17 @@ class Sphere(private val center: Point3, private val radius: Double, override va
         if (discriminant < 0 ) return null
 
         val sqrtd = sqrt(discriminant)
-        val root = (-halfB - sqrtd) / a
+        var root = (-halfB - sqrtd) / a
         if (root < tMin || tMax < root) {
-            val newRoot = (-halfB + sqrtd) / a
-            if (newRoot < tMin || tMax < newRoot) {
+            root = (-halfB + sqrtd) / a
+            if (root < tMin || tMax < root) {
                 return null
             }
         }
 
         val p = ray.at(root)
         val outwardNormal = (p - center) / radius
+
         return Hit(p, root, ray, outwardNormal)
     }
 }

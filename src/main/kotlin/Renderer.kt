@@ -6,7 +6,7 @@ class Renderer(private val outputLocation: File) {
     companion object {
         private const val maxDepth = 50
         private const val samplesPerPixel = 100
-        private const val imageWidth = 200
+        private const val imageWidth = 400
         private const val imageHeight = (imageWidth / Camera.aspectRatio).toInt()
     }
 
