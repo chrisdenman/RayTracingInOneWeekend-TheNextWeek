@@ -1,3 +1,4 @@
+import java.lang.Math.toRadians
 import kotlin.math.tan
 
 class Camera(lookFrom: Point3,
@@ -6,7 +7,7 @@ class Camera(lookFrom: Point3,
              verticalFieldOfViewDegrees: Double,
              aspectRatio: Double) {
 
-    private val theta = Math.toRadians(verticalFieldOfViewDegrees)
+    private val theta = toRadians(verticalFieldOfViewDegrees)
     private val h = tan(theta / 2)
     private val viewportHeight = 2.0 * h
     private val viewportWidth = aspectRatio * viewportHeight

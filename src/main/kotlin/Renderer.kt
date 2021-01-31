@@ -5,10 +5,10 @@ class Renderer(private val outputLocation: File) {
 
     companion object {
         private const val aspectRatio: Double = 16.0 / 9.0
-        private const val fieldOfViewDegrees: Double = 90.0
+        private const val fieldOfViewDegrees: Double = 20.0
         private const val maxDepth = 50
         private const val samplesPerPixel = 100
-        private const val imageWidth = 800
+        private const val imageWidth = 1000
         private const val imageHeight = (imageWidth / aspectRatio).toInt()
     }
 
@@ -26,7 +26,7 @@ class Renderer(private val outputLocation: File) {
     ))
 
     private val camera = Camera(
-        Point3(-2, -2, 1),
+        Point3(-2, 2, 1),
         Point3(0, 0, -1),
         Vec3(0, 1, 0),
         fieldOfViewDegrees,
@@ -59,5 +59,5 @@ class Renderer(private val outputLocation: File) {
 }
 
 fun main() {
-    Renderer(File("./results/positionable_camera_from_at.ppm")).render()
+    Renderer(File("./results/positionable_camera_from_at_fov.ppm")).render()
 }
