@@ -4,10 +4,12 @@ import java.io.File
 class Renderer(private val outputLocation: File) {
 
     companion object {
+        private const val aspectRatio: Double = 16.0 / 9.0
+        private const val fieldOfViewDegrees: Double = 90.0
         private const val maxDepth = 50
         private const val samplesPerPixel = 100
-        private const val imageWidth = 2000
-        private const val imageHeight = (imageWidth / Camera.aspectRatio).toInt()
+        private const val imageWidth = 800
+        private const val imageHeight = (imageWidth / aspectRatio).toInt()
     }
 
     private val groundMaterial = Lambertian(Colour(0.8, 0.8, 0.0))
@@ -19,11 +21,16 @@ class Renderer(private val outputLocation: File) {
         Sphere(Point3(0.0, -100.5, -1.0), 100.0, groundMaterial),
         Sphere(Point3(0.0, 0.0, -1.0), 0.5, centerMaterial),
         Sphere(Point3(-1.0, 0.0, -1.0), 0.5, leftMaterial),
-        Sphere(Point3(-1.0, 0.0, -1.0), -0.4, leftMaterial),
+        Sphere(Point3(-1.0, 0.0, -1.0), -0.45, leftMaterial),
         Sphere(Point3(1.0, 0.0, -1.0), 0.5, rightMaterial),
     ))
 
-    private val camera = Camera()
+    private val camera = Camera(
+        Point3(-2, -2, 1),
+        Point3(0, 0, -1),
+        Vec3(0, 1, 0),
+        fieldOfViewDegrees,
+        aspectRatio)
 
     fun render() {
         outputLocation.bufferedWriter().use {
@@ -52,5 +59,5 @@ class Renderer(private val outputLocation: File) {
 }
 
 fun main() {
-    Renderer(File("./results/dielectric_refraction_reflection_schlick_bubble.ppm")).render()
+    Renderer(File("./results/positionable_camera_from_at.ppm")).render()
 }

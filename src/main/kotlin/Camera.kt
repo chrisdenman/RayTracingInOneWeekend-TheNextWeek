@@ -1,20 +1,30 @@
-class Camera {
+import kotlin.math.tan
 
-    fun getRay(u: Double, v: Double) = Ray(
+class Camera(lookFrom: Point3,
+             lookAt: Point3,
+             vUp: Vec3,
+             verticalFieldOfViewDegrees: Double,
+             aspectRatio: Double) {
+
+    private val theta = Math.toRadians(verticalFieldOfViewDegrees)
+    private val h = tan(theta / 2)
+    private val viewportHeight = 2.0 * h
+    private val viewportWidth = aspectRatio * viewportHeight
+
+    private val w = (lookFrom - lookAt).unit
+    private val u = (vUp * w).unit
+    private val v = w * u
+
+    private val origin = lookFrom
+
+    private val horizontal = viewportWidth * u
+    private val vertical = viewportHeight * v
+    private val lowerLeftCorner = origin - (horizontal / 2.0) - (vertical / 2.0) - w
+
+    fun getRay(s: Double, t: Double) = Ray(
         origin,
-        lowerLeftCorner + (u * horizontal) + (v * vertical) - origin
+        lowerLeftCorner + (s * horizontal) + (t * vertical) - origin
     )
-
-    companion object {
-        const val aspectRatio: Double = 16.0 / 9.0
-        private const val viewportHeight = 2.0
-        private const val viewportWidth = aspectRatio * viewportHeight
-        private const val focalLength = 1.0
-        private val origin = Point3.ZERO
-        private val horizontal = Vec3(viewportWidth, 0.0, 0.0)
-        private val vertical = Vec3(0.0, viewportHeight, 0.0)
-        private val lowerLeftCorner = origin - (horizontal / 2.0) - (vertical / 2.0) - Vec3(0.0, 0.0, focalLength)
-    }
 }
 
 fun Double.clamp(minInclusive: Double, maxInclusive: Double) = when {
