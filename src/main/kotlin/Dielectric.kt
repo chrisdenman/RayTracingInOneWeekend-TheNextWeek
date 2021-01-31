@@ -3,6 +3,7 @@ import kotlin.math.pow
 import kotlin.random.Random.Default.nextDouble
 
 class Dielectric(private val indexOfRefraction: Double) : Material {
+
     override fun scatter(ray: Ray, rec: Hit): ScatterData {
         val attenuation = Colour.ONE
         val refractionRatio = if (rec.frontFace) indexOfRefraction.reciprocal else indexOfRefraction

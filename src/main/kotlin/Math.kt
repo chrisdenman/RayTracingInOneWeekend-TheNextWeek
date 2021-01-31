@@ -49,10 +49,11 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
     companion object {
 
         private const val TOLERANCE = 1E-8
+
         val ONE = Vec3(1, 1, 1)
         val ZERO = Vec3(0, 0, 0)
 
-        private fun boundedRandomComponents(minInclusive: Double, maxExclusive: Double): Vec3 =
+        fun boundedRandomComponents(minInclusive: Double, maxExclusive: Double): Vec3 =
             Vec3(
                 nextDouble(minInclusive, maxExclusive),
                 nextDouble(minInclusive, maxExclusive),
@@ -97,26 +98,32 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
         fun reflect(v: Vec3, normal: Vec3): Vec3 = v - 2 * (v dot normal) * normal
 
         fun refract(i: Vec3, n: Vec3, etai_over_etat: Double): Vec3 {
-            val cosThetai = min(-i dot n, 1.0)
-            val sinSquaredThetat = etai_over_etat * etai_over_etat * (1 - (cosThetai * cosThetai))
-            return (etai_over_etat * i) + (etai_over_etat * cosThetai - sqrt(1 - sinSquaredThetat)) * n
+            val cosThetaI = min(-i dot n, 1.0)
+            val sinSquaredThetaT = etai_over_etat * etai_over_etat * (1 - (cosThetaI * cosThetaI))
+            return (etai_over_etat * i) + (etai_over_etat * cosThetaI - sqrt(1 - sinSquaredThetaT)) * n
         }
 
         private fun tolerable(e: Double): Boolean = abs(e) < TOLERANCE
     }
 }
 
-operator fun Double.times(v: Vec3) = v * this
-
 typealias Point3 = Vec3
 typealias Colour = Vec3
+
+operator fun Double.times(v: Vec3) = v * this
 
 val Double.reciprocal get() = 1.0 / this
 val Double.cosOrSin get() = sqrt(1 - this * this)
 
+fun Double.clamp(minInclusive: Double, maxInclusive: Double) = when {
+    this < minInclusive -> minInclusive
+    this > maxInclusive -> maxInclusive
+    else -> this
+}
+
 fun Writer.writeColour(pixelColour: Colour, samplesPerPixel: Int) {
-    val scale = 1.0 / samplesPerPixel
-    val scaled = (scale * pixelColour)
+    val scale = samplesPerPixel.toDouble().reciprocal
+    val scaled = scale * pixelColour
     val gammaCorrected = Vec3(sqrt(scaled.x), sqrt(scaled.y), sqrt(scaled.z))
     gammaCorrected.let {
         write(

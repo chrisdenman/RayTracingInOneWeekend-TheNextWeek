@@ -35,9 +35,3 @@ class Camera(lookFrom: Point3,
         )
     }
 }
-
-fun Double.clamp(minInclusive: Double, maxInclusive: Double) = when {
-    this < minInclusive -> minInclusive
-    this > maxInclusive -> maxInclusive
-    else -> this
-}
