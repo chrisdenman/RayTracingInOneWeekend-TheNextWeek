@@ -2,7 +2,7 @@ import java.io.Writer
 import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.sqrt
-import kotlin.random.Random
+import kotlin.random.Random.Default.nextDouble
 
 @Suppress("unused")
 data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
@@ -33,7 +33,7 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
         scalar.z * z
     )
 
-    operator fun div(t: Double): Vec3 = this * t.reciprocal()
+    operator fun div(t: Double): Vec3 = this * t.reciprocal
 
     infix fun dot(v: Vec3) = (x * v.x) + (y * v.y) + (z * v.z)
 
@@ -46,14 +46,6 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
     val unit: Vec3
         get() = this / magnitude
 
-    /*
-    inline vec3 refract(const vec3& uv, const vec3& n, double etai_over_etat) {
-        auto cos_theta = fmin(dot(-uv, n), 1.0);
-        vec3 r_out_perp =  etai_over_etat * (uv + cos_theta*n);
-        vec3 r_out_parallel = -sqrt(fabs(1.0 - r_out_perp.length_squared())) * n;
-        return r_out_perp + r_out_parallel;
-    }
-    */
     companion object {
 
         private const val TOLERANCE = 1E-8
@@ -61,7 +53,23 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
         val ZERO = Vec3(0, 0, 0)
 
         private fun boundedRandomComponents(minInclusive: Double, maxExclusive: Double): Vec3 =
-            Vec3(Random.nextDouble(minInclusive, maxExclusive), Random.nextDouble(minInclusive, maxExclusive), Random.nextDouble(minInclusive, maxExclusive))
+            Vec3(
+                nextDouble(minInclusive, maxExclusive),
+                nextDouble(minInclusive, maxExclusive),
+                nextDouble(minInclusive, maxExclusive)
+            )
+
+        val randomInUnitDisc: Vec3
+            get() {
+                 while (true) {
+                     Vec3(
+                         nextDouble(-1.0,1.0),
+                         nextDouble(-1.0,1.0),
+                         0.0).let { candidate ->
+                             if (candidate.magnitudeSquared < 1) return candidate
+                         }
+                }
+            }
 
         fun randomInHemisphere(normal: Vec3): Vec3 =
             randomInUnitSphere.let {
@@ -84,7 +92,7 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
             get() = randomInUnitSphere.unit
 
         val randomUnitComponents: Vec3
-            get() = Vec3(Random.nextDouble(), Random.nextDouble(), Random.nextDouble())
+            get() = Vec3(nextDouble(), nextDouble(), nextDouble())
 
         fun reflect(v: Vec3, normal: Vec3): Vec3 = v - 2 * (v dot normal) * normal
 
@@ -103,7 +111,7 @@ operator fun Double.times(v: Vec3) = v * this
 typealias Point3 = Vec3
 typealias Colour = Vec3
 
-fun Double.reciprocal() = 1.0 / this
+val Double.reciprocal get() = 1.0 / this
 val Double.cosOrSin get() = sqrt(1 - this * this)
 
 fun Writer.writeColour(pixelColour: Colour, samplesPerPixel: Int) {
@@ -111,6 +119,10 @@ fun Writer.writeColour(pixelColour: Colour, samplesPerPixel: Int) {
     val scaled = (scale * pixelColour)
     val gammaCorrected = Vec3(sqrt(scaled.x), sqrt(scaled.y), sqrt(scaled.z))
     gammaCorrected.let {
-        write("${(256 * it.x.clamp(0.0, 0.999)).toInt()} ${(256 * it.y.clamp(0.0, 0.999)).toInt()} ${(256 * it.z.clamp(0.0, 0.999)).toInt()}\n")
+        write(
+            "${(256 * it.x.clamp(0.0, 0.999)).toInt()} " +
+                "${(256 * it.y.clamp(0.0, 0.999)).toInt()} " +
+                "${(256 * it.z.clamp(0.0, 0.999)).toInt()}\n"
+        )
     }
 }

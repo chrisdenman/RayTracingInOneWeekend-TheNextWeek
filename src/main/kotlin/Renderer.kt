@@ -4,7 +4,7 @@ import java.io.File
 class Renderer(private val outputLocation: File) {
 
     companion object {
-        private const val aspectRatio: Double = 16.0 / 9.0
+        private const val aspectRatio: Double = 3.0 / 2.0
         private const val fieldOfViewDegrees: Double = 20.0
         private const val maxDepth = 50
         private const val samplesPerPixel = 100
@@ -25,12 +25,23 @@ class Renderer(private val outputLocation: File) {
         Sphere(Point3(1.0, 0.0, -1.0), 0.5, rightMaterial),
     ))
 
-    private val camera = Camera(
-        Point3(-2, 2, 1),
-        Point3(0, 0, -1),
-        Vec3(0, 1, 0),
-        fieldOfViewDegrees,
-        aspectRatio)
+    private val camera: Camera
+
+    init {
+        val lookFrom = Point3(3, 3, 2)
+        val lookAt = Point3(0, 0, -1)
+        val vup = Vec3(0, 1, 0)
+        val focusDistance = (lookFrom - lookAt).magnitude
+        val aperture = 2.0
+        camera = Camera(
+            lookFrom,
+            lookAt,
+            vup,
+            fieldOfViewDegrees,
+            aspectRatio,
+            aperture,
+            focusDistance)
+    }
 
     fun render() {
         outputLocation.bufferedWriter().use {
@@ -59,5 +70,5 @@ class Renderer(private val outputLocation: File) {
 }
 
 fun main() {
-    Renderer(File("./results/positionable_camera_from_at_fov.ppm")).render()
+    Renderer(File("./results/positionable_camera_from_at_fov_defocus_blur.ppm")).render()
 }

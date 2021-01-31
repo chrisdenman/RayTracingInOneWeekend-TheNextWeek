@@ -1,18 +1,16 @@
 import kotlin.math.min
 import kotlin.math.pow
-import kotlin.math.sqrt
 import kotlin.random.Random.Default.nextDouble
 
 class Dielectric(private val indexOfRefraction: Double) : Material {
     override fun scatter(ray: Ray, rec: Hit): ScatterData {
         val attenuation = Colour.ONE
-        val refractionRatio =
-            if (rec.frontFace) indexOfRefraction.reciprocal() else indexOfRefraction
+        val refractionRatio = if (rec.frontFace) indexOfRefraction.reciprocal else indexOfRefraction
         val unitRayDirection = ray.direction.unit
 
-        val cosTheta = min(1.0, (-unitRayDirection) dot rec.normal)
-        val sinTheta = sqrt(1 - (cosTheta * cosTheta))
-        val cannotRefract = (refractionRatio * sinTheta) > 1.0
+        val cosTheta = min(1.0, -unitRayDirection dot rec.normal)
+        val sinTheta = cosTheta.cosOrSin
+        val cannotRefract = refractionRatio * sinTheta > 1.0
 
         val direction = if (cannotRefract || reflectance(cosTheta, refractionRatio) > nextDouble())
             Vec3.reflect(unitRayDirection, rec.normal) else
