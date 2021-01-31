@@ -15,6 +15,8 @@ A Kotlin version of the Peter Shirley's ray tracing course.
 1. [Diffuse Materials](https://raytracing.github.io/books/RayTracingInOneWeekend.html#diffusematerials)
 1. [Metal](https://raytracing.github.io/books/RayTracingInOneWeekend.html#metal)
 1. [Dielectrics](https://raytracing.github.io/books/RayTracingInOneWeekend.html#dielectrics)
+1. [Positionable Camera](https://raytracing.github.io/books/RayTracingInOneWeekend.html#positionablecamera)
+1.  [Defocus Blur](https://raytracing.github.io/books/RayTracingInOneWeekend.html#defocusblur)
 
 ## References
 
