@@ -1,3 +1,10 @@
+package materials
+
+import Colour
+import Hit
+import Material
+import Ray
+import ScatterData
 import Vec3.Companion.randomUnit
 
 class Lambertian(private val albedo: Colour) : Material {

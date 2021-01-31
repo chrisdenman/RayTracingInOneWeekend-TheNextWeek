@@ -1,3 +1,10 @@
+package geometry
+
+import Hit
+import Hittable
+import Material
+import Point3
+import Ray
 import kotlin.math.sqrt
 
 class Sphere(private val center: Point3, private val radius: Double, override val material: Material) : Hittable {

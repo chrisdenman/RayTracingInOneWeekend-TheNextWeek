@@ -1,3 +1,12 @@
+package materials
+
+import Hit
+import Material
+import Ray
+import ScatterData
+import Vec3
+import cosOrSin
+import reciprocal
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.random.Random.Default.nextDouble
@@ -5,7 +14,7 @@ import kotlin.random.Random.Default.nextDouble
 class Dielectric(private val indexOfRefraction: Double) : Material {
 
     override fun scatter(ray: Ray, rec: Hit): ScatterData {
-        val attenuation = Colour.ONE
+        val attenuation = Vec3.ONE
         val refractionRatio = if (rec.frontFace) indexOfRefraction.reciprocal else indexOfRefraction
         val unitRayDirection = ray.direction.unit
 

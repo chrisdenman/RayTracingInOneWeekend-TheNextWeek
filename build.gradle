@@ -7,11 +7,8 @@ buildscript {
 }
 
 plugins {
-	id 'jacoco'
-	id 'org.jetbrains.dokka' version "${versions_dokka}"
 	id 'org.jetbrains.kotlin.jvm' version "${versions_kotlin}"
 	id 'org.jlleitschuh.gradle.ktlint' version "${versions_klint}"
-    id "org.jetbrains.kotlin.kapt" version "1.4.30-M1"
 }
 apply plugin: 'uk.co.ceilingcat.SemanticVersions'
 
@@ -20,9 +17,6 @@ description = 'Ray Tracing in One Weekend in Kotlin'
 
 dependencies {
     implementation "io.arrow-kt:arrow-core:${versions_arrow}"
-    implementation "io.arrow-kt:arrow-syntax:${versions_arrow}"
-    kapt    "io.arrow-kt:arrow-meta:${versions_arrow}"
-
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions_kotlin}"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:${versions_junit_jupiter}"
@@ -49,23 +43,6 @@ test {
     }
 }
 
-dokkaHtml {
-    dokkaSourceSets {
-        configureEach {
-            jdkVersion.set(11)
-            displayName.set('JVM')
-            includes.from('src/main/kotlin/packages.md')
-            remoteUrl.set(java.net.URL(
-                'https://github.com/chrisdenman/rrd-xlsx-gateway/tree/main/src/main/kotlin'))
-        }
-    }
-}
-
-task dokkaJar(type: Jar, dependsOn: dokkaHtml, group: 'packaging') {
-    getArchiveClassifier().set('javadoc')
-    from javadoc.destinationDir
-}
-
 setProjectVersion.dependsOn patchIncrement
 patchIncrement.onlyIf(new Spec<Task>() {
     boolean isSatisfiedBy(Task task) {
@@ -74,9 +51,6 @@ patchIncrement.onlyIf(new Spec<Task>() {
 })
 
 setProjectVersion.dependsOn patchIncrement
-[dokkaHtml, compileKotlin].each {
-    it.dependsOn setProjectVersion
-}
+compileKotlin.dependsOn setProjectVersion
 [ktlintMainSourceSetCheck, ktlintTestSourceSetCheck].each { it.dependsOn ktlintFormat }
-check.dependsOn jacocoTestReport
-[jar, dokkaHtml].each { it.dependsOn check }
+jar.dependsOn check
