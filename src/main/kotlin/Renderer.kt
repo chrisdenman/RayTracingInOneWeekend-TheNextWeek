@@ -1,6 +1,11 @@
 import Vec3.Companion.ZERO
 import Vec3.Companion.boundedRandomComponents
 import geometry.Sphere
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
+import kotlinx.coroutines.joinAll
+import kotlinx.coroutines.runBlocking
 import materials.Dielectric
 import materials.Lambertian
 import materials.Metal
@@ -31,25 +36,36 @@ class Renderer(private val outputLocation: File) {
         world = makeFinalScene()
     }
 
+    @ExperimentalCoroutinesApi
     fun render() {
-        outputLocation.bufferedWriter().use {
-            it.run {
-                write("P3\n")
-                write( "$imageWidth\n")
-                write( "$imageHeight\n")
-                write( "255\n")
-                (imageHeight - 1).downTo(0).fold(Unit) { _, y ->
-                    println("${y + 1}/${imageHeight} scan lines remaining.")
-                    (0 until imageWidth).fold(Unit) { _, x ->
-                        val pixelColour = (0 until samplesPerPixel).fold(ZERO) { pixelColour, sampleIndex ->
-                            val u = (x + Math.random()) / (imageWidth - 1)
-                            val v = (y + Math.random()) / (imageHeight - 1)
-                            val r = camera.getRay(u, v)
-                            pixelColour + r.colour(world, maxDepth)
+        runBlocking {
+            outputLocation.bufferedWriter().use {
+                it.run {
+                    write("P3\n")
+                    write("$imageWidth\n")
+                    write("$imageHeight\n")
+                    write("255\n")
+                    (imageHeight - 1).downTo(0).fold(Unit) { _, y ->
+                        println("${y + 1}/${imageHeight} scan lines remaining.")
+                        val start = System.currentTimeMillis()
+                        (0 until imageWidth).fold(Unit) { _, x ->
+                            (0 until samplesPerPixel).map {
+                                async(context = Dispatchers.Default) {
+                                    val u = (x + Math.random()) / (imageWidth - 1)
+                                    val v = (y + Math.random()) / (imageHeight - 1)
+                                    val r = camera.getRay(u, v)
+                                    r.colour(world, maxDepth)
+                                }
+                            }.let { jobs ->
+                                jobs.joinAll()
+                                writeColour(jobs.fold(ZERO) { acc, curr ->
+                                    acc + curr.getCompleted()
+                                }, samplesPerPixel)
+                            }
                         }
-                        writeColour(pixelColour, samplesPerPixel)
+                        val end = System.currentTimeMillis()
+                        println("Elapsed time ${(end - start)} mS")
                     }
-                    val end = System.currentTimeMillis()
                 }
             }
         }
@@ -59,8 +75,8 @@ class Renderer(private val outputLocation: File) {
         private const val aspectRatio: Double = 3.0 / 2.0
         private const val fieldOfViewDegrees: Double = 20.0
         private const val maxDepth = 50
-        private const val samplesPerPixel = 50
-        private const val imageWidth = 200
+        private const val samplesPerPixel = 500
+        private const val imageWidth = 2000
         private const val imageHeight = (imageWidth / aspectRatio).toInt()
 
         fun makeFinalScene(): World {
@@ -100,6 +116,7 @@ class Renderer(private val outputLocation: File) {
     }
 }
 
+@ExperimentalCoroutinesApi
 fun main() {
     Renderer(File("./results/test.ppm")).render()
 }

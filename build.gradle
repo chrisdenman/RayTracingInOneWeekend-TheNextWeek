@@ -18,6 +18,7 @@ description = 'Ray Tracing in One Weekend in Kotlin'
 dependencies {
     implementation "io.arrow-kt:arrow-core:${versions_arrow}"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:${versions_kotlin}"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:${versions_kotlin_coroutines}"
 
     testImplementation "org.junit.jupiter:junit-jupiter-api:${versions_junit_jupiter}"
     testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:${versions_junit_jupiter}"
