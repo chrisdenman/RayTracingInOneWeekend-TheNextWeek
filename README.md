@@ -1,9 +1,9 @@
 # [Ray Tracing in One Weekend](https://raytracing.github.io/books/RayTracingInOneWeekend.html)
 
-A Kotlin version of the Peter Shirley's ray tracing course.
+A Kotlin implementation of Peter Shirley's 'Ray Tracing in One Weekend' book.
 
 
-## Chapters
+## Chapter Links
 
 1.  Overview
 1.  [Output An Image](https://raytracing.github.io/books/RayTracingInOneWeekend.html#outputanimage)
@@ -17,6 +17,28 @@ A Kotlin version of the Peter Shirley's ray tracing course.
 1. [Dielectrics](https://raytracing.github.io/books/RayTracingInOneWeekend.html#dielectrics)
 1. [Positionable Camera](https://raytracing.github.io/books/RayTracingInOneWeekend.html#positionablecamera)
 1.  [Defocus Blur](https://raytracing.github.io/books/RayTracingInOneWeekend.html#defocusblur)
+1.  [Where Next?](https://raytracing.github.io/books/RayTracingInOneWeekend.html#wherenext?)
+
+
+## Notes
+
+-   Not optimised for efficiency.
+-   I use a slightly different method for refraction calculation (see first reference).
+
+
+## Final Scene
+
+![An image of the final rendered scene](generated/finalScene.png "Final Rendered Scene")
+Rendered at: 2000px * 1333px, 500 samples/px, maximum depth of 50.
+
+
+## Future Work
+
+-   Making it as stateless/functional as possible and increasing its concurrency by using coroutines.
+-   Rectangular parallelepipeds.    
+-   Triangle support.
+-   Abstracting the description of scenes (maybe a DSL and custom file-format).
+
 
 ## References
 
