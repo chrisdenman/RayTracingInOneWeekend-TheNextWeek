@@ -34,7 +34,6 @@ Rendered at: 2000px * 1333px, 500 samples/px, maximum depth of 50.
 
 ## Future Work
 
--   Making it as stateless/functional as possible and increasing its concurrency by using coroutines.
 -   Rectangular parallelepipeds.    
 -   Triangle support.
 -   Abstracting the description of scenes (maybe a DSL and custom file-format).
