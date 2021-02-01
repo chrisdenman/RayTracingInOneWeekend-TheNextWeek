@@ -81,12 +81,11 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
             }
 
         val randomInUnitSphere: Vec3
-            get() {
-                var candidate = boundedRandomComponents(-1.0, 1.0)
-                while (candidate.magnitudeSquared >= 1) {
-                    candidate = boundedRandomComponents(-1.0, 1.0)
+            get() = boundedRandomComponents(-1.0, 1.0).let {
+                when {
+                    it.magnitudeSquared >= 1 -> randomInUnitSphere
+                    else -> it
                 }
-                return candidate
             }
 
         val randomUnit: Vec3

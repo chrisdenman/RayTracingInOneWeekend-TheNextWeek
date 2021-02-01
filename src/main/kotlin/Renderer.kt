@@ -38,24 +38,19 @@ class Renderer(private val outputLocation: File) {
                 write( "$imageWidth\n")
                 write( "$imageHeight\n")
                 write( "255\n")
-                for (y in (imageHeight - 1).downTo(0)) {
+                (imageHeight - 1).downTo(0).fold(Unit) { _, y ->
                     println("${y + 1}/${imageHeight} scan lines remaining.")
-                    val start = System.currentTimeMillis()
-                    for (x in 0 until imageWidth) {
-                        var pixelColour = ZERO
-                        for (sample in 0 until samplesPerPixel) {
+                    (0 until imageWidth).fold(Unit) { _, x ->
+                        val pixelColour = (0 until samplesPerPixel).fold(ZERO) { pixelColour, sampleIndex ->
                             val u = (x + Math.random()) / (imageWidth - 1)
                             val v = (y + Math.random()) / (imageHeight - 1)
                             val r = camera.getRay(u, v)
-                            pixelColour += r.colour(world, maxDepth)
+                            pixelColour + r.colour(world, maxDepth)
                         }
                         writeColour(pixelColour, samplesPerPixel)
-
                     }
                     val end = System.currentTimeMillis()
-                    println("Elapsed time ${(end - start)} mS")
                 }
-                println("Done.")
             }
         }
     }
@@ -65,7 +60,7 @@ class Renderer(private val outputLocation: File) {
         private const val fieldOfViewDegrees: Double = 20.0
         private const val maxDepth = 50
         private const val samplesPerPixel = 50
-        private const val imageWidth = 300
+        private const val imageWidth = 200
         private const val imageHeight = (imageWidth / aspectRatio).toInt()
 
         fun makeFinalScene(): World {
@@ -106,5 +101,5 @@ class Renderer(private val outputLocation: File) {
 }
 
 fun main() {
-    Renderer(File("./results/finalScene_.ppm")).render()
+    Renderer(File("./results/test.ppm")).render()
 }

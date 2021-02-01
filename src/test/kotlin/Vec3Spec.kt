@@ -83,7 +83,7 @@ internal class Vec3Spec {
 
     @Test fun `Reciprocating a Double`() {
         (-23.11).run {
-            assertEquals(1.0 / this, reciprocal())
+            assertEquals(1.0 / this, reciprocal)
         }
     }
 

@@ -1,15 +1,12 @@
 class World(private val objects: List<Hittable>) {
 
-    fun hit(ray: Ray, tMin: Double, tMax: Double): WorldHit? {
-        var currentClosest = tMax
-        var result: WorldHit? = null
-        for (hittable in objects) {
-            hittable.hit(ray, tMin, currentClosest)?.let { hit ->
-                currentClosest = hit.t
-                result = WorldHit(hittable, hit)
-            }
-        }
+    data class HitData(val currentClosest: Double, val worldHit: WorldHit? = null)
 
-        return result
+    fun hit(ray: Ray, tMin: Double, tMax: Double): WorldHit? {
+        return objects.fold(HitData(tMax)) { acc, hittable ->
+            hittable.hit(ray, tMin, acc.currentClosest)?.let { hit ->
+                HitData(hit.t, WorldHit(hittable, hit))
+            } ?: acc
+        }.worldHit
     }
 }
