@@ -15,7 +15,7 @@ class Lambertian(private val albedo: Colour) : Material {
                 else -> it
             }
         }
-        val scattered = Ray(rec.p, scatterDirection)
+        val scattered = Ray(rec.p, scatterDirection, ray.time)
         return ScatterData(albedo, scattered, true)
     }
 }

@@ -2,13 +2,17 @@ import Vec3.Companion.randomInUnitDisc
 import java.lang.Math.toRadians
 import kotlin.math.tan
 
-class Camera(lookFrom: Point3,
-             lookAt: Point3,
-             vUp: Vec3,
-             verticalFieldOfViewDegrees: Double,
-             aspectRatio: Double,
-             aperture: Double,
-             focusDistance: Double) {
+class Camera(
+    lookFrom: Point3,
+    lookAt: Point3,
+    vUp: Vec3,
+    verticalFieldOfViewDegrees: Double,
+    aspectRatio: Double,
+    aperture: Double,
+    focusDistance: Double,
+    private val time0: Double = 0.0,
+    private val time1: Double = 0.0
+) {
 
     private val theta = toRadians(verticalFieldOfViewDegrees)
     private val h = tan(theta / 2)
@@ -31,7 +35,8 @@ class Camera(lookFrom: Point3,
         val offset = u * rd.x + v * rd.y
         return Ray(
             origin + offset,
-            lowerLeftCorner + (s * horizontal) + (t * vertical) - origin - offset
+            lowerLeftCorner + (s * horizontal) + (t * vertical) - origin - offset,
+            random(time0, time1)
         )
     }
 }

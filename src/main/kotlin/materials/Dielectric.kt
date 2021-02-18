@@ -25,7 +25,7 @@ class Dielectric(private val indexOfRefraction: Double) : Material {
         val direction = if (cannotRefract || reflectance(cosTheta, refractionRatio) > nextDouble())
             Vec3.reflect(unitRayDirection, rec.normal) else
             Vec3.refract(unitRayDirection, rec.normal, refractionRatio)
-        val scattered = Ray(rec.p, direction)
+        val scattered = Ray(rec.p, direction, ray.time)
         return ScatterData(attenuation, scattered, true)
     }
 
@@ -34,7 +34,7 @@ class Dielectric(private val indexOfRefraction: Double) : Material {
             ((1 - refIndex) / (1 + refIndex)).let {
                 it * it
             }.let {
-                it + (1- it) * (1 - cosine).pow(5.0)
+                it + (1 - it) * (1 - cosine).pow(5.0)
             }
     }
 }

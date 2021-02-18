@@ -62,13 +62,14 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
 
         val randomInUnitDisc: Vec3
             get() {
-                 while (true) {
-                     Vec3(
-                         nextDouble(-1.0,1.0),
-                         nextDouble(-1.0,1.0),
-                         0.0).let { candidate ->
-                             if (candidate.magnitudeSquared < 1) return candidate
-                         }
+                while (true) {
+                    Vec3(
+                        nextDouble(-1.0, 1.0),
+                        nextDouble(-1.0, 1.0),
+                        0.0
+                    ).let { candidate ->
+                        if (candidate.magnitudeSquared < 1) return candidate
+                    }
                 }
             }
 
@@ -110,6 +111,9 @@ typealias Point3 = Vec3
 typealias Colour = Vec3
 
 operator fun Double.times(v: Vec3) = v * this
+
+fun random(min: Double, max: Double) =
+    min + (max - min) * nextDouble()
 
 val Double.reciprocal get() = 1.0 / this
 val Double.cosOrSin get() = sqrt(1 - this * this)

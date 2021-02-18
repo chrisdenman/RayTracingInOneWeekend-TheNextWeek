@@ -1,4 +1,8 @@
-data class Ray(val origin: Point3, val direction: Vec3) {
+data class Ray(
+    val origin: Point3,
+    val direction: Vec3,
+    val time: Double = 0.0
+) {
 
     fun at(t: Double): Point3 = origin + (direction * t)
 

@@ -1,5 +1,6 @@
 import Vec3.Companion.ZERO
 import Vec3.Companion.boundedRandomComponents
+import geometry.MovingSphere
 import geometry.Sphere
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -31,7 +32,10 @@ class Renderer(private val outputLocation: File) {
             fieldOfViewDegrees,
             aspectRatio,
             aperture,
-            focusDistance)
+            focusDistance,
+            0.0,
+            1.0
+        )
 
         world = makeFinalScene()
     }
@@ -46,7 +50,7 @@ class Renderer(private val outputLocation: File) {
                     write("$imageHeight\n")
                     write("255\n")
                     (imageHeight - 1).downTo(0).fold(Unit) { _, y ->
-                        println("${y + 1}/${imageHeight} scan lines remaining.")
+                        println("${y + 1}/$imageHeight scan lines remaining.")
                         val start = System.currentTimeMillis()
                         (0 until imageWidth).fold(Unit) { _, x ->
                             (0 until samplesPerPixel).map {
@@ -58,9 +62,12 @@ class Renderer(private val outputLocation: File) {
                                 }
                             }.let { jobs ->
                                 jobs.joinAll()
-                                writeColour(jobs.fold(ZERO) { acc, curr ->
-                                    acc + curr.getCompleted()
-                                }, samplesPerPixel)
+                                writeColour(
+                                    jobs.fold(ZERO) { acc, curr ->
+                                        acc + curr.getCompleted()
+                                    },
+                                    samplesPerPixel
+                                )
                             }
                         }
                         val end = System.currentTimeMillis()
@@ -72,11 +79,11 @@ class Renderer(private val outputLocation: File) {
     }
 
     companion object {
-        private const val aspectRatio: Double = 3.0 / 2.0
+        private const val aspectRatio: Double = 16.0 / 9.0
         private const val fieldOfViewDegrees: Double = 20.0
         private const val maxDepth = 50
-        private const val samplesPerPixel = 500
-        private const val imageWidth = 2000
+        private const val samplesPerPixel = 100
+        private const val imageWidth = 400
         private const val imageHeight = (imageWidth / aspectRatio).toInt()
 
         fun makeFinalScene(): World {
@@ -84,16 +91,20 @@ class Renderer(private val outputLocation: File) {
             val groundMaterial = Lambertian(Colour(0.5, 0.5, 0.5))
             hittables.add(Sphere(Point3(0, -1000, 0), 1000.0, groundMaterial))
 
-            for (a in -11 until 11)  {
+            for (a in -11 until 11) {
                 for (b in -11 until 11) {
                     val chooseMat = nextDouble()
                     val center = Point3(a + 0.9 * nextDouble(), 0.2, b + 0.9 * nextDouble())
 
-                    if (((center - Point3(4.0, 0.2, 0.0)).magnitude) > 0.9 ) {
+                    if (((center - Point3(4.0, 0.2, 0.0)).magnitude) > 0.9) {
                         if (chooseMat < 0.8) {
+                            val center2 = center + Vec3(0.0, random(0.0, 0.5), 0.0)
                             hittables.add(
-                                Sphere(
+                                MovingSphere(
                                     center,
+                                    center2,
+                                    0.0,
+                                    1.0,
                                     0.2,
                                     Lambertian(Vec3.randomUnitComponents * Vec3.randomUnitComponents)
                                 )
@@ -118,5 +129,5 @@ class Renderer(private val outputLocation: File) {
 
 @ExperimentalCoroutinesApi
 fun main() {
-    Renderer(File("./results/test.ppm")).render()
+    Renderer(File("./results/2_motion_blur.ppm")).render()
 }
