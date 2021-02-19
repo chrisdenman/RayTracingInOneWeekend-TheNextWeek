@@ -10,5 +10,3 @@ A Kotlin implementation of Peter Shirley's 'Ray Tracing: The Next Week' book.
 1.  [Bounding Volume Hierarchies](https://raytracing.github.io/books/RayTracingTheNextWeek.html#boundingvolumehierarchies)
 
 ## Notes
-
-1.  Sort out sphere/movingSphere.

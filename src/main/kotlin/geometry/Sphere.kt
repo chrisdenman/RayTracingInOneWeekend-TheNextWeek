@@ -5,9 +5,13 @@ import Hittable
 import Material
 import Point3
 import Ray
+import Vec3
 import kotlin.math.sqrt
 
-class Sphere(private val center: Point3, private val radius: Double, override val material: Material) : Hittable {
+class Sphere(
+    private val center: Point3,
+    private val radius: Double,
+    material: Material) : Hittable, Material by material {
 
     override fun hit(ray: Ray, tMin: Double, tMax: Double): Hit? {
         val oc = ray.origin - center
@@ -38,4 +42,10 @@ class Sphere(private val center: Point3, private val radius: Double, override va
             return Hit(p, root, ray, outwardNormal)
         }
     }
+
+    override fun boundingBox(time0: Double, time1: Double): AABB =
+        AABB(
+            center - Vec3(radius, radius, radius),
+            center + Vec3(radius, radius, radius)
+        )
 }

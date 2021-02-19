@@ -5,6 +5,7 @@ import Hittable
 import Material
 import Point3
 import Ray
+import Vec3
 import kotlin.math.sqrt
 
 class MovingSphere(
@@ -13,8 +14,8 @@ class MovingSphere(
     private val time0: Double,
     private val time1: Double,
     private val radius: Double,
-    override val material: Material
-) : Hittable {
+    material: Material
+) : Hittable, Material by material {
 
     private fun center(time: Double) =
         center0 + (center1 - center0) * ((time - time0) / (time1 - time0))
@@ -48,4 +49,13 @@ class MovingSphere(
             return Hit(p, root, ray, outwardNormal)
         }
     }
+
+    override fun boundingBox(time0: Double, time1: Double): AABB =
+        AABB(
+            center(time0) - Vec3(radius, radius, radius),
+            center(time0) + Vec3(radius, radius, radius)
+        ) union AABB(
+            center(time1) - Vec3(radius, radius, radius),
+            center(time1) + Vec3(radius, radius, radius)
+        )
 }
