@@ -1,8 +1,9 @@
 import geometry.AABB
+import kotlin.random.Random
 
 interface Hittable {
     fun hit(ray: Ray, tMin: Double, tMax: Double): Hit?
-    fun boundingBox(time0: Double, time1: Double): AABB?
+    fun boundingBox(time0: Double = 0.0, time1: Double = 0.0): AABB?
 }
 
 data class Hit(val p: Point3, val t: Double, val ray: Ray, val outwardNormal: Vec3) {
@@ -30,4 +31,19 @@ fun Collection<Hittable>.boundingBox(time0: Double, time1: Double): AABB? {
             result;
         }
     }
+}
+
+fun axisComparator(): Comparator<Hittable> {
+    val comparisonIndex = Random.nextInt(0, 3)
+    return (object: Comparator<Hittable> {
+        override fun compare(a: Hittable?, b: Hittable?): Int {
+            val boxA= a?.boundingBox()
+            val boxB = b?.boundingBox()
+            if ( boxA == null || boxB == null) {
+                throw IllegalArgumentException("No bounding boxes")
+            } else {
+                return Math.signum(boxA.min[comparisonIndex] - boxB.min[comparisonIndex]).toInt()
+            }
+        }
+    })
 }
