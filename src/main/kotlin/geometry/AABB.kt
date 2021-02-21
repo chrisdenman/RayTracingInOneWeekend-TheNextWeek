@@ -9,11 +9,15 @@ class AABB(val min: Point3, val max: Point3) {
 
     fun hit(ray: Ray, tMin: Double, tMax: Double): Boolean {
         for (dimension in 0 until 3) {
-            val t0 = min((min[dimension] - ray.origin[dimension]) / ray.direction[dimension],
-                (max[dimension] - ray.origin[dimension]) / ray.direction[dimension])
+            val t0 = min(
+                (min[dimension] - ray.origin[dimension]) / ray.direction[dimension],
+                (max[dimension] - ray.origin[dimension]) / ray.direction[dimension]
+            )
 
-            val t1 = max((min[dimension] - ray.origin[dimension]) / ray.direction[dimension],
-                (max[dimension] - ray.origin[dimension]) / ray.direction[dimension])
+            val t1 = max(
+                (min[dimension] - ray.origin[dimension]) / ray.direction[dimension],
+                (max[dimension] - ray.origin[dimension]) / ray.direction[dimension]
+            )
 
             if (min(t1, tMax) <= max(t0, tMin)) {
                 return false

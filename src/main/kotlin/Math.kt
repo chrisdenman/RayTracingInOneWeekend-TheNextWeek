@@ -17,14 +17,14 @@ data class Vec3(val x: Double = 0.0, val y: Double = 0.0, val z: Double = 0.0) {
         z + other.z
     )
 
-    operator fun get(index: Int): Double = when(index) {
+    operator fun get(index: Int): Double = when (index) {
         0 -> x
         1 -> y
         2 -> z
-        else -> throw RuntimeException("No such component with index '${index}'")
+        else -> throw RuntimeException("No such component with index '$index'")
     }
 
-    operator fun minus(other: Vec3): Vec3 = this - other
+    operator fun minus(other: Vec3): Vec3 = this + -other
 
     operator fun times(t: Double): Vec3 = Vec3(x * t, y * t, z * t)
 

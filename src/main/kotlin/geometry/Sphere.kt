@@ -11,7 +11,8 @@ import kotlin.math.sqrt
 class Sphere(
     private val center: Point3,
     private val radius: Double,
-    material: Material) : Hittable, Material by material {
+    override val material: Material
+) : Hittable {
 
     override fun hit(ray: Ray, tMin: Double, tMax: Double): Hit? {
         val oc = ray.origin - center

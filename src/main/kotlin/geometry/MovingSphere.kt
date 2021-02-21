@@ -14,8 +14,8 @@ class MovingSphere(
     private val time0: Double,
     private val time1: Double,
     private val radius: Double,
-    material: Material
-) : Hittable, Material by material {
+    override val material: Material?
+) : Hittable {
 
     private fun center(time: Double) =
         center0 + (center1 - center0) * ((time - time0) / (time1 - time0))
@@ -42,11 +42,11 @@ class MovingSphere(
             }
         }
 
-        return root?.let { root ->
-            val p = ray.at(root)
+        return root?.let { nonNullableRoot ->
+            val p = ray.at(nonNullableRoot)
             val outwardNormal = (p - center(ray.time)) / radius
 
-            return Hit(p, root, ray, outwardNormal)
+            return Hit(p, nonNullableRoot, ray, outwardNormal)
         }
     }
 

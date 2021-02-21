@@ -49,10 +49,11 @@ class Renderer(private val outputLocation: File) {
                     write("$imageWidth\n")
                     write("$imageHeight\n")
                     write("255\n")
-                    (imageHeight - 1).downTo(0).fold(Unit) { _, y ->
+
+                    (imageHeight - 1).downTo(0).forEach { y ->
                         println("${y + 1}/$imageHeight scan lines remaining.")
                         val start = System.currentTimeMillis()
-                        (0 until imageWidth).fold(Unit) { _, x ->
+                        (0 until imageWidth).forEach { x ->
                             (0 until samplesPerPixel).map {
                                 async(context = Dispatchers.Default) {
                                     val u = (x + Math.random()) / (imageWidth - 1)
